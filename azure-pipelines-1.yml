@@ -1,0 +1,43 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - name: 'BuildConfiguration'
+    value: 'Release'
+
+steps:
+  - script: |
+      echo "Installing PHP..."
+      sudo apt-get update
+      sudo apt-get install -y php
+
+  - script: |
+      echo "Downloading and installing Composer..."
+      php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+      php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
+      php -r "unlink('composer-setup.php');"
+
+  - script: |
+      echo "Installing project dependencies..."
+      composer install
+
+  - script: |
+      echo "Running PHP script..."
+      php script.php
+
+
