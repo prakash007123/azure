@@ -12,8 +12,8 @@ jobs:
   - task: AzureRmWebAppDeployment@4
     displayName: 'Deploy to Azure App Service'
     inputs:
-        ConnectionType: 'AImodelportalconnection'
-        azureSubscription: '764cc2bd-e8cc-4900-82cc-4f7667b3fe3c'
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'AImodelportalconnection'
         appType: 'webAppContainer'
         WebAppName: 'loanmodel'
         DockerNamespace: 'mahiaireg.azurecr.io'
