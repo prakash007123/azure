@@ -1,42 +1,68 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-  branches:
-    include:
-      - main
-
-pr:
-  branches:
-    include:
-      - master
+- main
 
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  - name: 'BuildConfiguration'
-    value: 'Release'
+jobs:
+- job: DeployContainerApp
+  displayName: 'Deploy Container App'
+  steps:
 
-steps:
-  - script: |
-      echo "Installing PHP..."
-      sudo apt-get update
-      sudo apt-get install -y php
+  - task: AzureRmWebAppDeployment@4
+    displayName: 'Deploy to Azure App Service'
+    inputs:
+        ConnectionType: 'Freetrial'
+        azureSubscription: '764cc2bd-e8cc-4900-82cc-4f7667b3fe3c'
+        appType: 'webAppContainer'
+        WebAppName: 'loanmodel'
+        DockerNamespace: 'mahiaireg.azurecr.io'
+        DockerRepository: 'musicgenerai'
+        DockerImageTag: '3.0.0'  # or '$(Build.BuildId)'
+        StartupCommand: 'gunicorn -b 0.0.0.0:8000 changepond_chatbot_azure:app'
 
-  - script: |
-      echo "Installing Composer..."
-      php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-      php composer-setup.php --quiet
-      php -r "unlink('composer-setup.php');"
-      sudo mv composer.phar /usr/local/bin/composer
 
-  - script: |
-      echo "Installing project dependencies..."
-      composer install
 
-  - script: |
-      echo "Running PHP script..."
-      php script.php
+
+# # Starter pipeline
+# # Start with a minimal pipeline that you can customize to build and deploy your code.
+# # Add steps that build, run tests, deploy, and more:
+# # https://aka.ms/yaml
+
+# trigger:
+#   branches:
+#     include:
+#       - main
+
+# pr:
+#   branches:
+#     include:
+#       - master
+
+# pool:
+#   vmImage: 'ubuntu-latest'
+
+# variables:
+#   - name: 'BuildConfiguration'
+#     value: 'Release'
+
+# steps:
+#   - script: |
+#       echo "Installing PHP..."
+#       sudo apt-get update
+#       sudo apt-get install -y php
+
+#   - script: |
+#       echo "Installing Composer..."
+#       php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+#       php composer-setup.php --quiet
+#       php -r "unlink('composer-setup.php');"
+#       sudo mv composer.phar /usr/local/bin/composer
+
+#   - script: |
+#       echo "Installing project dependencies..."
+#       composer install
+
+#   - script: |
+#       echo "Running PHP script..."
+#       php script.php
