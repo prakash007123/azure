@@ -19,7 +19,7 @@ jobs:
         DockerNamespace: 'mahiaireg.azurecr.io'
         DockerRepository: 'musicgenerai'
         DockerImageTag: '3.0.0'  # or '$(Build.BuildId)'
-        StartupCommand: 'gunicorn -b 0.0.0.0:80 changepond_chatbot_azure:app'
+        StartupCommand: 'flask run -b 0.0.0.0:8000 changepond_chatbot_azure:app'
 
 
 
